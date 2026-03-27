@@ -33,6 +33,7 @@ public final class LorePowers extends JavaPlugin implements Listener {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new PearlLink(), this);
         CoreTools.getInstance().setPlugin(this);
         TimedEffectManager.getInstance().setPlugin(this);
         CooldownManager.getInstance().setPlugin(this);
@@ -288,7 +289,7 @@ public final class LorePowers extends JavaPlugin implements Listener {
         }
     }
 
-    // TODO: Fix this power, it is somewhat broken!
+    // TO DO: Fix this power, it is somewhat broken!
     @EventHandler
     public void onDamageByEnemy_PiglinAid(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
@@ -548,18 +549,27 @@ public final class LorePowers extends JavaPlugin implements Listener {
                 // sike
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 0, 0, true, true, true));
             }
-        } else {
-            if (player != null) {
-                boolean hasAllEffects = player.hasPotionEffect(PotionEffectType.STRENGTH) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.STRENGTH)).getAmplifier() == 1 &&
-                        player.hasPotionEffect(PotionEffectType.SLOWNESS) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOWNESS)).getAmplifier() == 0;
-
-                if (hasAllEffects) {
-                    player.removePotionEffect(PotionEffectType.STRENGTH);
-                    player.removePotionEffect(PotionEffectType.SLOWNESS);
-                    player.sendMessage(CoreTools.getInstance().getPrefix() + ChatColor.RED + "Can't believe bro got debuffed :/");
+            }else{
+                if (player != null) {
+                    boolean hasAllEffects = player.hasPotionEffect(PotionEffectType.STRENGTH) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.STRENGTH)).getAmplifier() == 1 &&
+                            player.hasPotionEffect(PotionEffectType.SLOWNESS) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOWNESS)).getAmplifier() == 0;
+    
+                    if (hasAllEffects) {
+                        player.removePotionEffect(PotionEffectType.STRENGTH);
+                        player.removePotionEffect(PotionEffectType.SLOWNESS);
+                        player.sendMessage(CoreTools.getInstance().getPrefix() + ChatColor.RED + "Can't believe bro got debuffed :/");
+                    }
                 }
             }
-        }
+
+        if (player != null) {
+            if (checkPower(playerUUID, Power.LIGHT_WEIGHT) && !player.isOnGround() && player.getVelocity().getY() < 0 && player.isSneaking()) { // Light weight
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 1, true, false, false));
+            } else {
+                if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOW_FALLING)).getAmplifier() == 1) {
+                    player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                    player.sendMessage(CoreTools.getInstance().getPrefix() + ChatColor.RED + "You are no longer light as a feather"); } } }
+
         if (player != null) {
             // scale management
             // todo: make this a switch statement if possible
