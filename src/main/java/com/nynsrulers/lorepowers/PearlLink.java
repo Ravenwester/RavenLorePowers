@@ -1,6 +1,7 @@
 package com.nynsrulers.lorepowers;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,6 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.entity.EnderPearl;
 public class PearlLink implements Listener {
     private final Map<UUID, UUID> pearlLink = new HashMap<>();
     @EventHandler
@@ -37,5 +43,12 @@ public class PearlLink implements Listener {
         event.setCancelled(true);
         tped.teleport(event.getTo());
         tped.sendMessage(CoreTools.getInstance().getPrefix() + ChatColor.BLUE + "bro got bamboozled");
-        CooldownManager.getInstance().addCooldown(tper.getUniqueId(), Power.PEARL_LINK, 1200L);
-        pearlLink.remove(tper.getUniqueId()); } }
+        CooldownManager.getInstance().addCooldown(tper.getUniqueId(), Power.PEARL_LINK, 1800L);
+        pearlLink.remove(tper.getUniqueId()); }
+    @EventHandler
+    public void dimensionChange(PlayerChangedWorldEvent event) {
+        Player changer = event.getPlayer();
+        Location coords = changer.getLocation();
+        Random chance = new Random();
+        if (chance.nextDouble() < 0.80) changer.getWorld().spawnEntity(coords, EntityType.ENDERMITE);
+        if (chance.nextDouble() < 0.20) changer.getWorld().spawnEntity(coords, EntityType.ENDERMITE); } }

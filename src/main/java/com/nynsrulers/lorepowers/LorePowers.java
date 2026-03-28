@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 public final class LorePowers extends JavaPlugin implements Listener {
+    private static LorePowers instance;
     public HashMap<UUID, BukkitTask> beeFlightTasks = new HashMap<>();
     public List<UUID> dragonFormActive = new ArrayList<>();
     public List<UUID> sparksIdeaActive = new ArrayList<>();
@@ -30,6 +31,7 @@ public final class LorePowers extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        instance = this;
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
@@ -562,13 +564,9 @@ public final class LorePowers extends JavaPlugin implements Listener {
                 }
             }
 
-        if (player != null) {
-            if (checkPower(playerUUID, Power.LIGHT_WEIGHT) && !player.isOnGround() && player.getVelocity().getY() < 0 && player.isSneaking()) { // Light weight
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 1, true, false, false));
-            } else {
-                if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOW_FALLING)).getAmplifier() == 1) {
-                    player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-                    player.sendMessage(CoreTools.getInstance().getPrefix() + ChatColor.RED + "You are no longer light as a feather"); } } }
+        if (player != null) { // Light weight
+            if (checkPower(playerUUID, Power.LIGHT_WEIGHT) && !player.isOnGround() && player.getVelocity().getY() < 0 && player.isSneaking()) player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 1, true, false, false));
+            else if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOW_FALLING)).getAmplifier() == 1) player.removePotionEffect(PotionEffectType.SLOW_FALLING); }
 
         if (player != null) {
             // scale management
@@ -619,4 +617,6 @@ public final class LorePowers extends JavaPlugin implements Listener {
             }
         }
     }
+    public static LorePowers getInstance() {
+        return instance; }
 }
