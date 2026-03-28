@@ -458,6 +458,16 @@ public final class LorePowers extends JavaPlugin implements Listener {
         }
     }
 
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        Player player = e.getPlayer();
+        if (checkPower(player.getUniqueId(), Power.LIGHT_WEIGHT) && player.isSneaking() && !player.isOnGround() && player.getVelocity().getY() < 0) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20, 0, true, false, false)); } else {
+            if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
+                PotionEffect effect = player.getPotionEffect(PotionEffectType.SLOW_FALLING);
+                if (effect != null && effect.getDuration() <= 20) {
+                    player.removePotionEffect(PotionEffectType.SLOW_FALLING); } } } }
+
     void reloadPlugin() {
         reloadConfig();
         CoreTools.getInstance().setPlugin(this);
@@ -563,10 +573,6 @@ public final class LorePowers extends JavaPlugin implements Listener {
                     }
                 }
             }
-
-        if (player != null) { // Light weight
-            if (checkPower(playerUUID, Power.LIGHT_WEIGHT) && !player.isOnGround() && player.getVelocity().getY() < 0 && player.isSneaking()) player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 1, true, false, false));
-            else if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING) && Objects.requireNonNull(player.getPotionEffect(PotionEffectType.SLOW_FALLING)).getAmplifier() == 1) player.removePotionEffect(PotionEffectType.SLOW_FALLING); }
 
         if (player != null) {
             // scale management
