@@ -48,6 +48,7 @@ public class PearlLink implements Listener {
     @EventHandler
     public void dimensionChange(PlayerChangedWorldEvent event) {
         Player changer = event.getPlayer();
+        if (!LorePowers.getInstance().checkPower(changer.getUniqueId(), Power.PEARL_LINK)) return;
         Location coords = changer.getLocation();
         Random chance = new Random();
         if (chance.nextDouble() < 0.80) changer.getWorld().spawnEntity(coords, EntityType.ENDERMITE);
