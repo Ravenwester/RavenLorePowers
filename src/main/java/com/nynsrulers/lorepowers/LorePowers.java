@@ -23,7 +23,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 public final class LorePowers extends JavaPlugin implements Listener {
-    private static LorePowers instance;
     public HashMap<UUID, BukkitTask> beeFlightTasks = new HashMap<>();
     public List<UUID> dragonFormActive = new ArrayList<>();
     public List<UUID> sparksIdeaActive = new ArrayList<>();
@@ -31,11 +30,10 @@ public final class LorePowers extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        instance = this;
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new PearlLink(), this);
+        getServer().getPluginManager().registerEvents(new PearlLink(this), this);
         CoreTools.getInstance().setPlugin(this);
         TimedEffectManager.getInstance().setPlugin(this);
         CooldownManager.getInstance().setPlugin(this);
