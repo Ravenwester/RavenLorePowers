@@ -291,7 +291,7 @@ public final class LorePowers extends JavaPlugin implements Listener {
         }
     }
 
-    // TO DO: Fix this power, it is somewhat broken!
+    // TODO: Fix this power, it is somewhat broken!
     @EventHandler
     public void onDamageByEnemy_PiglinAid(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
@@ -459,7 +459,7 @@ public final class LorePowers extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
+    public void onMove_LightWeight(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (checkPower(player.getUniqueId(), Power.LIGHT_WEIGHT) && player.isSneaking() && !player.isOnGround() && player.getVelocity().getY() < 0) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20, 0, true, false, false)); } else {
